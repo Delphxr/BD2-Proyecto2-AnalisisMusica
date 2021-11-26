@@ -678,6 +678,7 @@ fame
 famed
 famous
 famously
+family
 fancier
 fancinating
 fancy
@@ -776,6 +777,7 @@ fruitful
 ftw
 fulfillment
 fun
+funny
 futurestic
 futuristic
 gaiety
@@ -1260,6 +1262,7 @@ panoramic
 paradise
 paramount
 pardon
+party
 passion
 passionate
 passionately
@@ -1592,6 +1595,7 @@ sensibly
 sensitive
 serene
 serenity
+sex
 sexy
 sharp
 sharper
