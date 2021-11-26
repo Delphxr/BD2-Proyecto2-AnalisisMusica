@@ -53,37 +53,24 @@ def evaluar(diccionario, letra):
 
     palabras = letra.split()
 
-    palabras_usadas = {}
-
-
-    #primero creamos un diccionairo que contiene las palabras y su cantidad de apariciones
-    for palabra in palabras:
-
-        palabra = palabra.lower() #pasamos a minuscula para ahorrarnos errores
-
-        if palabra in palabras_usadas:
-            palabras_usadas[palabra] += 1
-        
-        else:
-            palabras_usadas[palabra] = 1
-
-
-    #ahora hacemos el analisis y sacamos puntos
     aciertos_positivos = 0
     aciertos_negativos = 0
     aciertos_totales = 0
 
-    for key, value in palabras_usadas.items():
+    #hacemos el analisis de palabras
+    for palabra in palabras:
 
-        
+        palabra = palabra.lower() #pasamos a minuscula para ahorrarnos errores
 
-        if key in diccionario["positivo"]:
-            aciertos_positivos += value
-            aciertos_totales += value
+        if palabra in diccionario["positivo"]:
+            aciertos_positivos += 1
+            aciertos_totales += 1
         
-        if key in diccionario["negativo"]:
-            aciertos_negativos += value
-            aciertos_totales += value
+        if palabra in diccionario["negativo"]:
+            aciertos_negativos += 1
+            aciertos_totales += 1
+
+
 
     
     puntuacion = (aciertos_positivos-aciertos_negativos)/aciertos_totales

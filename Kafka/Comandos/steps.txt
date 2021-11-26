@@ -1,0 +1,4 @@
+docker-compose exec kafka kafka-topics --create --topic newsales --partitions 1 --replication-factor 1 --bootstrap-server 25.7.237.232:29093
+docker-compose exec kafka bash
+kafka-console-producer --topic newsales --bootstrap-server 25.7.237.232:29093
+kafka-console-consumer --topic newsales --from-beginning 25.7.237.232:29093
