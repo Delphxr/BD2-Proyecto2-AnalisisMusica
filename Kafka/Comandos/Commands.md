@@ -55,7 +55,12 @@ java -jar consumer.jar
 ## Call the Producer
 - el .jar tiene que estar en la misma carpeta que las letras
 
+
 - se pone como argumento el nombre del .csv con las letras
+
+To start the kafkta server just run the script `/home/hadoopuser/start-kafka.sh` located in the hadoopuser home folder from the folder /opt/kafka_2.13-3.0.0/
+
+
 ```powershell
 java -jar producer.jar lyrics_c.csv
 ```
