@@ -35,3 +35,27 @@ docker run -it --rm -v C:\dev\tec\hadoopbases2\pyspark\examples:/src pyspark bas
 docker run -it --name spark --rm -p 7077:7077 -v W:\Bodega\KAFKA-SPARK\cursostec\hadoopbases2\pyspark\examples:/src --net littlenet --ip 10.0.0.3 pyspark bash
 
 ```
+
+
+# KAFKA AND SPARK | STREAMING:
+
+Lo ideal es que todos los archivos necesarios estén en mapr, para así evitar todos los problemas
+
+## Call the Consumer
+
+El consumer de momento exporta un .csv con los datos que se recibieron (y con la letra analizada) luego de llegarle un bache de datos
+
+- negative-words.txt y positive-words.txt tienen que estar en la misma carpeta que el .jar
+```powershell
+java -jar consumer.jar
+```
+
+
+
+## Call the Producer
+- el .jar tiene que estar en la misma carpeta que las letras
+
+- se pone como argumento el nombre del .csv con las letras
+```powershell
+java -jar producer.jar lyrics_c.csv
+```
