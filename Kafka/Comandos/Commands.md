@@ -5,11 +5,18 @@
 
 ```powershell
 
-docker build . -t hadoop
+docker-compose up -d
 
-docker network create --driver bridge --subnet 10.0.0.0/28 littlenet
 
-docker run -it -p 9000:9000 -p 9092:9092 -p 22:22 -v W:\Bodega\KAFKA-SPARK\cursostec\hadoopbases2\mapr:/home/hadoopuser/mapr --name hadoopserver --net littlenet --ip 10.0.0.2 hadoop
+//Server
+docker-compose exec kafka kafka-topics --create --topic newsales --partitions 1 --replication-factor 1 --bootstrap-server 25.7.237.232:29093
+
+//Producer
+docker-compose exec kafka bash
+kafka-console-producer --topic newsales --bootstrap-server 25.7.237.232:29093
+
+//Consumer
+kafka-console-consumer --topic newsales --from-beginning  --bootstrap-server 25.7.237.232:29093
 
 ```
 
