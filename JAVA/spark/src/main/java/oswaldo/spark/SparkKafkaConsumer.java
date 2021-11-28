@@ -105,11 +105,12 @@ public class SparkKafkaConsumer {
 							String lyrics = tokens[5]; // letra de la cancion
 							String len = tokens[6]; // largo en segundos de la cancion
 						
-						    // hacemos el analisis de los pts
+						    // hacemos el analisis de los pts y del tema
 							float puntos = analyzer.analize(lyrics);
+							String theme = analyzer.theme(lyrics);
 							String pts = String.valueOf(puntos);
 							
-							sb.append(id).append(COMMA).append(QUOTE).append(artist).append(QUOTE).append(COMMA).append(QUOTE).append(trackName).append(QUOTE).append(COMMA).append(releaseDate).append(COMMA).append(genre).append(COMMA).append(QUOTE).append(lyrics).append(QUOTE).append(COMMA).append(len).append(COMMA).append(pts);
+							sb.append(id).append(COMMA).append(QUOTE).append(artist).append(QUOTE).append(COMMA).append(QUOTE).append(trackName).append(QUOTE).append(COMMA).append(releaseDate).append(COMMA).append(genre).append(COMMA).append(QUOTE).append(lyrics).append(QUOTE).append(COMMA).append(len).append(COMMA).append(pts).append(COMMA).append(theme);
 							allRecord.add(sb.toString());
 						  }
 					} catch (IOException e) {

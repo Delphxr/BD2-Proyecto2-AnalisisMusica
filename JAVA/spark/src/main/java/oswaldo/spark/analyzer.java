@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -86,9 +88,31 @@ public class analyzer {
 			puntuacion = (puntosPositivos-puntosNegativos)/(float)puntosTotales;
 		}
 		
-		
-		
 		return puntuacion;
+	}
+	
+	public String theme(String lyrics) {
+		String a = null;
+		int max = 0;
+		List<String> values = Arrays.asList("the","a","with","of", "and"); //para no tomar en cuenta los articulos
+		
+		HashMap<String, Integer> occurrences = new HashMap<String, Integer>();
+		String[] words = lyrics.split("\\s+");
+		
+		for (String word : words) {
+			if (values.contains(word) == false){
+			    int value = 0;
+			    if(occurrences.containsKey(word)){
+			        value = occurrences.get(word);
+			    }
+			    occurrences.put(word, value + 1);
+			    if(max < value+1){
+			        max = value+1;
+			        a = word;
+			    }
+			}	
+		}
+		return a;
 	}
 	
 	public analyzer() throws FileNotFoundException {
