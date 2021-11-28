@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
+
 
 import com.opencsv.CSVReader;
 
@@ -22,11 +22,43 @@ import org.apache.spark.streaming.kafka.KafkaUtils;
 
 import kafka.serializer.StringDecoder;
 
+import java.util.Properties;
+
+
+
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.ByteArraySerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
+
 public class SparkKafkaConsumer {
 
+	static Properties props = new Properties(); // para el producer
+	
+	public static void send(List<String> messages){	
+		props.setProperty("bootstrap.servers", "localhost:9092");
+		props.setProperty("kafka.topic.name", "kafka"); //topic al que le vamos a escribir
+		KafkaProducer<String, byte[]> producer = new KafkaProducer<String, byte[]>(props,new StringSerializer(), new ByteArraySerializer());
+		
+		System.out.println("***************************************");
+		System.out.println("ENVIANDO MENSAJES A KAFKA...");
+		System.out.println("***************************************");
+
+		for(String s : messages) {
+			byte[] payload = (s).getBytes();
+			ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(props.getProperty("kafka.topic.name"), payload);
+			producer.send(record);
+		}
+		producer.close();
+	}
+	
+	
 	public static void main(String[] args) throws IOException {
 		
 		analyzer analyzer = new analyzer();  //creamos un objeto del analizador de letras
+		
+		
+		
 		
 		System.out.println("Spark Streaming started now .....");
 
@@ -87,12 +119,14 @@ public class SparkKafkaConsumer {
 					  
 				  });
 				System.out.println("All records OUTER MOST :"+allRecord.size()); 
-				FileWriter writer = new FileWriter("Master_dataset.csv");
+				FileWriter writer = new FileWriter("Master_dataset.csv", true);
+				send(allRecord);
 				for(String s : allRecord) {
 					writer.write(s);
 					writer.write("\n");
 				}
 				System.out.println("Master dataset has been created : ");
+				
 				writer.close();
 			  }
 		  });

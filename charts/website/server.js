@@ -44,7 +44,30 @@ app.get('/largo', function(req,res){
     })
 
 
-  });
+});
+
+app.get('/sentimientos-anno', function(req,res){
+    console.log("hola!")
+    const sql = 'select release_date, avg(points) as sentimientos from lyrics where release_date != 0 group by release_date'
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return (err);
+            
+        }
+        if (!result || !result.length) {
+            console.log("Sin respuesta")
+            return next(new Error('no results'))
+        }
+        console.log("todo ok")
+        const lyrics = result;
+        res.render(path.join(__dirname + '/express/sentimientos_anno.ejs'), { lyrics: lyrics } );
+    })
+
+
+});
+
+
 const server = http.createServer(app);
 const port = 3000;
 server.listen(port);

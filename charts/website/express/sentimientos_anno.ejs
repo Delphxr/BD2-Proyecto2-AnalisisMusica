@@ -19,7 +19,6 @@
     var lyrics = <%- JSON.stringify(lyrics); %>;
 
     lyrics.sort(function(x,y){return y["release_date"]-x["release_date"]}).reverse();
-    console.log(lyrics)
     
 
     console.log("a")
@@ -30,20 +29,20 @@
 
      
       var dt = new google.visualization.DataTable();
-      dt.addColumn('string', 'año');
-      dt.addColumn('number', 'largo');
+      dt.addColumn('string', 'Año');
+      dt.addColumn('number', 'Sentimiento');
 
       rows = []
       lyrics.forEach(function(song) {
         
-        rows.push( [song.release_date.toString(), song.largo])
+        rows.push( [song.release_date.toString(), song.sentimientos])
       });
       dt.addRows(rows)
    
 
       // Set chart options
       var options = {
-        'title': 'Largo (segundos) de canciones durante los años',
+        'title': 'Nivel sentimental de la musica durante los años',
         'width': 1000,
         'height': 500
       };
