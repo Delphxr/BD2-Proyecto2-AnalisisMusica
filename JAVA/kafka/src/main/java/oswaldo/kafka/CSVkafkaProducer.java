@@ -47,9 +47,7 @@ public class CSVkafkaProducer {
 
         while (true){
             ArrayList<File> processedFiles = new ArrayList<>();
-            ArrayList<File> filesToProcess = new ArrayList<>();
-
-            Collections.copy(filesToProcess, kafkaProducer.files);
+            ArrayList<File> filesToProcess = (ArrayList<File>) kafkaProducer.files.clone();
             //Captura los archivos que ha encontrado hasta el momento
             // y trabaja solo con esos para no tener problemas si entran nuevos
 
