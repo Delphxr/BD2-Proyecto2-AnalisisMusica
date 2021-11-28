@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -54,7 +55,7 @@ public class CSVkafkaProducer {
             for (File file : filesToProcess) {
                 kafkaProducer.PublishMessages(file);
                 processedFiles.add(file);
-                System.out.println("Processed file: "+file.getName());
+                System.out.println("\n\n *********************** \n Processed file: "+file.getName() + "\n");
             }
 
             kafkaProducer.files.removeAll(processedFiles); //Removes processed files from queue
@@ -69,25 +70,29 @@ public class CSVkafkaProducer {
     private void PublishMessages(File file) throws URISyntaxException{
 
         final Producer<String, String> csvProducer = ProducerProperties();
-
+        System.out.println("\n \n Empezando a leer " + file.getName() + "\n");
         try{
-            URI uri = getClass().getClassLoader().getResource(file.getAbsolutePath()).toURI();
+            URI uri = getClass().getClassLoader().getResource(file.getName()).toURI();
             Stream<String> FileStream = Files.lines(Paths.get(uri));
 
+            final AtomicInteger count = new AtomicInteger();
+            
             FileStream.forEach(line -> {
-                System.out.println(line);
-
+                
+     
                 final ProducerRecord<String, String> csvRecord = new ProducerRecord<String, String>(
                         KafkaTopic, UUID.randomUUID().toString(), line);
 
                 csvProducer.send(csvRecord, (metadata, exception) -> {
                     if(metadata != null){
-                        System.out.println("CsvData: -> "+ csvRecord.key()+" | "+ csvRecord.value());
+                    	System.out.print("| Trabajando con en la linea #" + count.incrementAndGet() + "        |\r");
+                    	
                     }
                     else{
                         System.out.println("Error Sending Csv Record -> "+ csvRecord.value());
                     }
                 });
+                ;
             });
 
         } catch (IOException | NullPointerException e) {
