@@ -1,0 +1,123 @@
+<html>
+
+<head>
+  <!--Load the AJAX API-->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.load('current', {'packages':['line']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+
+    var lyrics = <%- JSON.stringify(lyrics); %>;
+
+    lyrics.sort(function(x,y){return y["release_date"]-x["release_date"]}).reverse();
+    
+
+    console.log("a")
+
+    function drawChart() {
+
+
+
+     
+      var dt = new google.visualization.DataTable();
+      dt.addColumn('string', 'Año');
+      dt.addColumn('number', 'Rock');
+      dt.addColumn('number', 'Country');
+      dt.addColumn('number', 'Jazz');
+      dt.addColumn('number', 'Pop');
+      dt.addColumn('number', 'Reggae');
+      dt.addColumn('number', 'Hip Hop');
+      dt.addColumn('number', 'Blues');
+
+      row_template = {
+        anno_actual : 0,
+        rock : 0,
+        country : 0,
+        jazz : 0,
+        pop : 0,
+        reggae : 0,
+        'hip hop' : 0,
+        blues : 0
+      }
+      new_row = row_template
+      anno_actual = 0
+      rows = []
+
+      lyrics.forEach(function(song) {
+        
+
+        if (song.release_date == anno_actual) {
+            new_row[song.genre] = song.sentimientos
+            console.log("iguales",anno_actual, song.release_date)
+        }
+        else {
+            console.log(anno_actual, song.release_date)
+            
+            if (anno_actual != 0) {
+                rows.push(new_row)
+            }
+            new_row = {
+        anno_actual : 0,
+        rock : 0,
+        country : 0,
+        jazz : 0,
+        pop : 0,
+        reggae : 0,
+        'hip hop' : 0,
+        blues : 0
+      }
+
+            anno_actual = song.release_date;
+            new_row["anno_actual"] = anno_actual
+            new_row[song.genre] = song.sentimientos
+        }
+      });
+      rows.push(new_row)
+      console.log("aguacate pro")
+      console.log(rows)
+
+      final_rows = []
+      rows.forEach(function(song) {
+        
+        final_rows.push( [song.anno_actual.toString(), song.rock, song.country, song.jazz, song.pop, song.reggae, song['hip hop'], song.blues])
+      });
+
+      console.log(final_rows)
+      dt.addRows(final_rows)
+   
+
+      // Set chart options
+      var options = {
+        'title': 'Nivel sentimental de la musica durante los años',
+        'width': 1500,
+        'height': 720
+      };
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.charts.Line(document.getElementById('chart_div'));
+      chart.draw(dt, google.charts.Line.convertOptions(options));
+    }
+  </script>
+</head>
+
+<body>
+  <!--Div that will hold the pie chart-->
+  <div id="chart_div"></div>
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,112 @@
+<html>
+
+<head>
+  <!--Load the AJAX API-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.load('current', {'packages':['line']});
+    google.charts.load('current', {'packages':['timeline']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+
+    var lyrics = <%- JSON.stringify(lyrics); %>;
+
+    lyrics.sort(function(x,y){return y["release_date"]-x["release_date"]}).reverse();
+    
+
+    console.log("a")
+
+    function drawChart() {
+
+
+
+     
+      var dt = new google.visualization.DataTable();
+      dt.addColumn('string', 'Año');
+      dt.addColumn('number', 'apariciones');
+  
+
+      rows = []
+      lyrics.forEach(function(song) {
+        
+        rows.push( [song.release_date.toString(), song.apariciones])
+      });
+      dt.addRows(rows)
+   
+
+      // Set chart options
+      var options = {
+        'title': 'veces que aparece el mismo tema el mismo año',
+        'width': 1000,
+        'height': 500
+      };
+      var chart = new google.charts.Line(document.getElementById('chart_div'));
+      chart.draw(dt, google.charts.Line.convertOptions(options));
+
+//////////////////////////////
+
+        rows = []
+
+        lyrics.forEach(function(song) {
+        
+        rows.push( [song.theme, new Date(song.release_date, 1, 1), new Date(song.release_date, 12, 31)])
+        });
+
+
+        var dataTable = new google.visualization.DataTable();
+
+        dataTable.addColumn({ type: 'string', id: 'tema' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+        dataTable.addRows(rows);
+
+
+        var chart = new google.visualization.Timeline(document.getElementById('chart_div2'));
+        chart.draw(dataTable, options);
+
+
+    }
+  </script>
+</head>
+
+<body>
+  <!--Div that will hold the pie chart-->
+  <div id="chart_div"></div>
+
+  <h1>Temas más comunes por año</h1>
+
+  <div id="chart_div2"></div>
+
+  <table class="table table-striped">
+    <tr>
+      <th>Año</th>
+      <th>Tema Principal</th>
+      <th>Apariciones</th>
+    </tr>
+    <% lyrics.forEach(function (song) { %>
+    <tr>
+      <td><%= song.release_date %></td>
+      <td><%= song.theme %></td>
+      <td><%= song.apariciones %></td>
+    </tr>
+    <% }); %>
+  </table>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
