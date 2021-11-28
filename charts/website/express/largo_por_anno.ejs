@@ -1,0 +1,79 @@
+<html>
+
+<head>
+  <!--Load the AJAX API-->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.load('current', {'packages':['line']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+
+    var lyrics = <%- JSON.stringify(lyrics); %>;
+
+    lyrics.sort(function(x,y){return y["release_date"]-x["release_date"]}).reverse();
+    console.log(lyrics)
+    
+
+    console.log("a")
+
+    function drawChart() {
+
+      // Create the data table.
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Topping');
+      data.addColumn('number', 'Slices');
+      data.addRows([
+        ['xd', 3],
+        ['Onions', 1],
+        ['Olives', 1],
+        ['Zucchini', 1],
+        ['Pepperoni', 2]
+      ]);
+
+     
+      var dt = new google.visualization.DataTable();
+      dt.addColumn('string', 'año');
+      dt.addColumn('number', 'largo');
+
+      rows = []
+      lyrics.forEach(function(song) {
+        
+        rows.push( [song.release_date.toString(), song.largo])
+      });
+      dt.addRows(rows)
+   
+
+      // Set chart options
+      var options = {
+        'title': 'Largo (segundos) de canciones',
+        'width': 1000,
+        'height': 500
+      };
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.charts.Line(document.getElementById('chart_div'));
+      chart.draw(dt, google.charts.Line.convertOptions(options));
+    }
+  </script>
+</head>
+
+<body>
+  <!--Div that will hold the pie chart-->
+  <div id="chart_div"></div>
+
+
+
+
+
+
+</body>
+
+</html>
