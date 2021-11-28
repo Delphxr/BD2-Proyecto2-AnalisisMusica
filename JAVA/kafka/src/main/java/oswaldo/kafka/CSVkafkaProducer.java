@@ -1,10 +1,13 @@
 package oswaldo.kafka;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -19,11 +22,12 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 public class CSVkafkaProducer {
 
-	private static String KafkaBrokerEndpoint = "localhost:9092";
+    private static String KafkaBrokerEndpoint = "localhost:9092";
     private static String KafkaTopic = "proyecto";
-    private static String CsvFile = "lyrics_a.csv";
-    
-  
+
+    public ArrayList<String> filesReviewed = new ArrayList<>();
+    public ArrayList<File> files = new ArrayList<>();
+
     private Producer<String, String> ProducerProperties(){
         Properties properties = new Properties();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaBrokerEndpoint);
@@ -32,34 +36,49 @@ public class CSVkafkaProducer {
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
 
-        return new KafkaProducer<String, String>(properties);
+        return new KafkaProducer<>(properties);
     }
 
     public static void main(String[] args) throws URISyntaxException {
-        
-    	
-    	
-    	CsvFile = args[0];
-    	
-    	CSVkafkaProducer kafkaProducer = new CSVkafkaProducer();
-        kafkaProducer.PublishMessages();
-        System.out.println("Producing job completed");
+
+        CSVkafkaProducer kafkaProducer = new CSVkafkaProducer();
+        FolderListener folderListener = new FolderListener(kafkaProducer);
+        folderListener.start();
+
+        while (true){
+            ArrayList<File> processedFiles = new ArrayList<>();
+            ArrayList<File> filesToProcess = new ArrayList<>();
+
+            Collections.copy(filesToProcess, kafkaProducer.files);
+            //Captura los archivos que ha encontrado hasta el momento
+            // y trabaja solo con esos para no tener problemas si entran nuevos
+
+            for (File file : filesToProcess) {
+                kafkaProducer.PublishMessages(file);
+                processedFiles.add(file);
+                System.out.println("Processed file: "+file.getName());
+            }
+
+            kafkaProducer.files.removeAll(processedFiles); //Removes processed files from queue
+
+        }
+
     }
 
-    
-    
+
+
     @SuppressWarnings("resource")
-	private void PublishMessages() throws URISyntaxException{
-    	
+    private void PublishMessages(File file) throws URISyntaxException{
+
         final Producer<String, String> csvProducer = ProducerProperties();
-        
+
         try{
-        	URI uri = getClass().getClassLoader().getResource(CsvFile).toURI();
+            URI uri = getClass().getClassLoader().getResource(file.getAbsolutePath()).toURI();
             Stream<String> FileStream = Files.lines(Paths.get(uri));
-            
+
             FileStream.forEach(line -> {
-            	System.out.println(line);
-            	
+                System.out.println(line);
+
                 final ProducerRecord<String, String> csvRecord = new ProducerRecord<String, String>(
                         KafkaTopic, UUID.randomUUID().toString(), line);
 
@@ -73,8 +92,8 @@ public class CSVkafkaProducer {
                 });
             });
 
-        } catch (IOException e) {
-        	System.out.println("********** OH NO ***********");
+        } catch (IOException | NullPointerException e) {
+            System.out.println("********** OH NO ***********");
             e.printStackTrace();
         }
     }
