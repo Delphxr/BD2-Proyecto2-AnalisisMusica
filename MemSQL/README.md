@@ -11,6 +11,8 @@ docker run -i --init --name memsql-ciab --net littlenet --ip 10.0.0.9 -e LICENSE
 
 docker start memsql-ciab
 
+docker exec -it memsql-ciab memsql -p"jlL()QUEBP@sGgTNEETj"
+
 
 ```
 
@@ -29,31 +31,36 @@ CREATE TABLE lyrics (
     release_date INT,
     genre VARCHAR(24),
     lyrics VARCHAR(1000),
-    len INT
+    len INT,
+    points FLOAT,
+    theme VARCHAR(50)
 );
 
-insert into lyrics (id,artist_name, trackname, release_date, genre, lyrics, len) values (1,'pepe', 'la cancion de pepe', 2004, 'electro cumbia', 'hola soy pepe, hola soy pepe, hola soy pepe, adios pepe', 54);
-
-select * from lyrics;
 
 CREATE PIPELINE kafka_consumer AS
-    LOAD DATA KAFKA "hadoopserver:9092/proyecto"
+    LOAD DATA KAFKA "hadoopserver:9092/memsql"
     SKIP ALL ERRORS
     INTO TABLE lyrics
     FIELDS TERMINATED BY ',' 
     OPTIONALLY ENCLOSED BY '"'
     IGNORE 1 LINES
-    (id, artist_name, trackname, release_date, genre, lyrics, len);
+    (id, artist_name, trackname, release_date, genre, lyrics, len, points, theme);
 
 
 
-TEST PIPELINE kafka_consumer LIMIT 1;
 
-START PIPELINE kafka_consumer FOREGROUND LIMIT 1 BATCHES; --para probar y recibir solo un bache y probar
+TEST PIPELINE kafka_consumer LIMIT 10;
 
-select * from lyrics where release_date = 2006
+
+select count(id) from lyrics
+
+delete from lyrics
 
 
 START PIPELINE kafka_consumer;
 
-SELECT * FROM information_schema.PIPELINES_BATCHES_SUMMARY; //ver informacion de batches```
+
+SELECT * FROM information_schema.PIPELINES_BATCHES_SUMMARY; //ver informacion de batches
+
+
+```
