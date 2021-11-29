@@ -45,17 +45,17 @@ public class KafkaTopicReader extends Thread{
 		props.setProperty("kafka.topic.name", "memsql"); //topic al que le vamos a escribir
 		KafkaProducer<String, byte[]> producer = new KafkaProducer<String, byte[]>(this.props,new StringSerializer(), new ByteArraySerializer());
 		
-
+		int index = 0;
         while(messages.hasNext()){
+        	index++;
         	String Message = new String(messages.next().message());
-			System.out.println(Message + "****");
+        	System.out.print("| Trabajando con en la linea #" + String.valueOf(index) + "        |\r");
 			byte[] payload = (Message).getBytes();
 			ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(props.getProperty("kafka.topic.name"), payload);
 			producer.send(record);
 		}
-        
+        System.out.println("\n **** \n");
 		producer.close();
-
 	}
 
 	@Override
