@@ -1,4 +1,21 @@
-docker-compose exec kafka kafka-topics --create --topic newsales --partitions 1 --replication-factor 1 --bootstrap-server 25.7.237.232:29093
+docker-compose up
+docker-compose exec kafka kafka-topics --create --topic proyecto --partitions 1 --replication-factor 1 --bootstrap-server 25.7.237.232:29093
+docker-compose exec kafka kafka-topics --create --topic kafka --partitions 1 --replication-factor 1 --bootstrap-server 25.7.237.232:29093
+docker-compose exec kafka kafka-topics --create --topic memsql --partitions 1 --replication-factor 1 --bootstrap-server 25.7.237.232:29093
+
+
+//Spark consumer
+docker run -it -v C:\GitHub_Projects\cursostec\cursostec\hadoopbases2\mapr:/home/hadoopuser/mapr --name hadoopserver hadoop
+cd mapr/cosumer/consumerspark
+update-alternatives --config java
+2
+java -jar consumer.jar
+
 docker-compose exec kafka bash
+kafka-topics --list --bootstrap-server 25.7.237.232:29093
+
+
 kafka-console-producer --topic newsales --bootstrap-server 25.7.237.232:29093
-kafka-console-consumer --topic newsales --from-beginning 25.7.237.232:29093
+kafka-console-consumer --topic newsales --from-beginning --bootstrap-server 25.7.237.232:29093
+kafka-consumer-groups --bootstrap-server 25.7.237.232:29093 --list
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group kafkaConsumer --describe
