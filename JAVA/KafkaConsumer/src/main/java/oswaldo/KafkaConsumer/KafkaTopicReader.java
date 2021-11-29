@@ -41,7 +41,7 @@ public class KafkaTopicReader extends Thread{
 	}
 	
 	public void send(ConsumerIterator<byte[], byte[]> messages){	
-		props.setProperty("bootstrap.servers", "localhost:9092");
+		props.setProperty("bootstrap.servers", "25.7.237.232:9092");
 		props.setProperty("kafka.topic.name", "memsql"); //topic al que le vamos a escribir
 		KafkaProducer<String, byte[]> producer = new KafkaProducer<String, byte[]>(this.props,new StringSerializer(), new ByteArraySerializer());
 		
@@ -49,7 +49,7 @@ public class KafkaTopicReader extends Thread{
         while(messages.hasNext()){
         	index++;
         	String Message = new String(messages.next().message());
-        	System.out.print("| Trabajando con en la linea #" + String.valueOf(index) + "        |\r");
+        	System.out.print("| Trabajando con el dato #" + String.valueOf(index) + "        |\r");
 			byte[] payload = (Message).getBytes();
 			ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(props.getProperty("kafka.topic.name"), payload);
 			producer.send(record);
