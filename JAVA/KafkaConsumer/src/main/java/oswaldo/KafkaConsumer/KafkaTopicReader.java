@@ -20,10 +20,7 @@ public class KafkaTopicReader extends Thread{
 	 public static String topicName = "kafka"; //topic que vamos a escuchar
 	 
 	 Properties props = new Properties(); // para el producer
-	 
-	 
-	 
-	 
+
 
     public KafkaTopicReader(){
     	System.out.println("** Initialize **");
@@ -32,6 +29,7 @@ public class KafkaTopicReader extends Thread{
     	props.put("group.id","group_binod_test");
     	ConsumerConfig consumerConfig = new ConsumerConfig(props);
     	consumer = kafka.consumer.Consumer.createJavaConsumerConnector(consumerConfig);
+		System.out.println("Connected succesfully");
     }
 	public static void main(String[] args) {
 		System.out.println("******* Consumer Started ***************");
@@ -60,9 +58,6 @@ public class KafkaTopicReader extends Thread{
 
 	@Override
 	public void run(){
-		
-		
-				
 		Map<String,Integer> topicCountMap = new HashMap<String,Integer>();
 		topicCountMap.put(topicName, new Integer(1));
 		Map<String,List<KafkaStream<byte[], byte[]>>> consuerMap = consumer.createMessageStreams(topicCountMap);

@@ -72,8 +72,8 @@ public class CSVkafkaProducer {
         final Producer<String, String> csvProducer = ProducerProperties();
         System.out.println("\n \n Empezando a leer " + file.getName() + "\n");
         try{
-            URI uri = getClass().getClassLoader().getResource(file.getName()).toURI();
-            Stream<String> FileStream = Files.lines(Paths.get(uri));
+            //URI uri = getClass().getClassLoader().getResource().toURI();
+            Stream<String> FileStream = Files.lines(Paths.get(file.getPath()));
 
             final AtomicInteger count = new AtomicInteger();
             
