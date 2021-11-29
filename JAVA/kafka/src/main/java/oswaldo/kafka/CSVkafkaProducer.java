@@ -55,7 +55,7 @@ public class CSVkafkaProducer {
             for (File file : filesToProcess) {
                 kafkaProducer.PublishMessages(file);
                 processedFiles.add(file);
-                System.out.println("\n\n *********************** \n Processed file: "+file.getName() + "\n");
+                System.out.println("\n \n Processed file: "+file.getName() + "\n *********************** \n");
             }
 
             kafkaProducer.files.removeAll(processedFiles); //Removes processed files from queue
