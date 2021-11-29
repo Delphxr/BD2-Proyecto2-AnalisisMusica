@@ -28,7 +28,7 @@ public class KafkaTopicReader extends Thread{
     public KafkaTopicReader(){
     	System.out.println("** Initialize **");
     	Properties props = new Properties();
-    	props.put("zookeeper.connect","localhost:2181");
+    	props.put("zookeeper.connect","25.7.237.232:22181");
     	props.put("group.id","group_binod_test");
     	ConsumerConfig consumerConfig = new ConsumerConfig(props);
     	consumer = kafka.consumer.Consumer.createJavaConsumerConnector(consumerConfig);
@@ -41,7 +41,7 @@ public class KafkaTopicReader extends Thread{
 	}
 	
 	public void send(ConsumerIterator<byte[], byte[]> messages){	
-		props.setProperty("bootstrap.servers", "localhost:9092");
+		props.setProperty("bootstrap.servers", "25.7.237.232:29093");
 		props.setProperty("kafka.topic.name", "memsql"); //topic al que le vamos a escribir
 		KafkaProducer<String, byte[]> producer = new KafkaProducer<String, byte[]>(this.props,new StringSerializer(), new ByteArraySerializer());
 		

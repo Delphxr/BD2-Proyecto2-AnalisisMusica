@@ -36,7 +36,7 @@ public class SparkKafkaConsumer {
 	static Properties props = new Properties(); // para el producer
 	
 	public static void send(List<String> messages){	
-		props.setProperty("bootstrap.servers", "localhost:9092");
+		props.setProperty("bootstrap.servers", "25.7.237.232:29093");
 		props.setProperty("kafka.topic.name", "kafka"); //topic al que le vamos a escribir
 		KafkaProducer<String, byte[]> producer = new KafkaProducer<String, byte[]>(props,new StringSerializer(), new ByteArraySerializer());
 		
@@ -68,7 +68,7 @@ public class SparkKafkaConsumer {
 		JavaStreamingContext ssc = new JavaStreamingContext(sc, new Duration(20000));
 
 		Map<String, String> kafkaParams = new HashMap<>();
-		kafkaParams.put("metadata.broker.list", "localhost:9092");
+		kafkaParams.put("metadata.broker.list", "25.7.237.232:29093");
 		Set<String> topics = Collections.singleton("proyecto");
 
 		JavaPairInputDStream<String, String> directKafkaStream = KafkaUtils.createDirectStream(ssc, String.class,

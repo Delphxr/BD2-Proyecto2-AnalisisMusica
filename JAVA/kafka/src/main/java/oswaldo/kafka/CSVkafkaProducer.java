@@ -23,7 +23,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 public class CSVkafkaProducer {
 
-    private static String KafkaBrokerEndpoint = "localhost:9092";
+    private static String KafkaBrokerEndpoint = "25.7.237.232:29093";
     private static String KafkaTopic = "proyecto";
 
     public ArrayList<String> filesReviewed = new ArrayList<>();
