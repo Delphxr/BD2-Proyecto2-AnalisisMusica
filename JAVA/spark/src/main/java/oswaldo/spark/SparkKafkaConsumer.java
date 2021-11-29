@@ -80,13 +80,12 @@ public class SparkKafkaConsumer {
 		  
 		  directKafkaStream.foreachRDD(rdd -> {
 			  
-		  System.out.println("New data arrived  " + rdd.partitions().size() +" Partitions and " + rdd.count() + " Records");
+		  System.out.println("\n New data arrived  " + rdd.partitions().size() +" Partitions and " + rdd.count() + " Records \n");
+		  
 			  if(rdd.count() > 0) {
 				rdd.collect().forEach(rawRecord -> {
 					  
-					  System.out.println(rawRecord);
-					  System.out.println("***************************************");
-					  System.out.println(rawRecord._2);
+					  System.out.print("| Trabajando con en la linea #" + String.valueOf(rdd.count()) + "        |\r");
 					  String record = rawRecord._2();
 					  
 					  //StringTokenizer st = new StringTokenizer(record,",");
